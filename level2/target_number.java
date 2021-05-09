@@ -35,7 +35,7 @@ class Solution {
 			int sum = 0;
 			String tail = Integer.toBinaryString(i);
 			String head = "00000000000000000000";   // numbers 배열 최대 20개까지
-            String sign = head.substring(0, numLen - tail.length()) + tail;
+			String sign = head.substring(0, numLen - tail.length()) + tail;
             
 			for(int j=0; j<numLen; j++) {
 				if(sign.charAt(j)=='0') {
