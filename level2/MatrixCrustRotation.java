@@ -47,14 +47,13 @@
 
 class Solution {
     public int[] solution(int rows, int columns, int[][] queries) {
-        int[] answer = {};
-
-        int[][] initArray = new int[rows][columns];
+        int[] answer = new int[queries.length];
+        int[][] matrix = new int[rows][columns];
         int initNum = 1;
 
         for(int i=0; i<rows; i++) {
-            for(int j=0; j<columns; j++){
-                initArray[i][j] = initNum++;
+            for(int j=0; j<columns; j++) {
+                matrix[i][j] = initNum++;
             }
         }
 
@@ -64,15 +63,35 @@ class Solution {
             int y1 = queries[i][1]-1;
             int y2 = queries[i][3]-1;
 
-            // System.out.println(initArray[x1][y1]);
-            // System.out.println(initArray[x1][y2]);
-            // System.out.println(initArray[x2][y1]);
-            // System.out.println(initArray[x2][y2]);
+            int row = x1;
+            int col = y1;
+            int minNum = rows * columns;
+            int preNum = matrix[row][col];
 
-            System.out.println((x2-x1+y2-y1) * 2);
+            while(true) {
+                minNum = minNum > preNum ? preNum : minNum;
 
+                if(row == x1 && col != y2) {
+                    col++;
+                } else if(row != x2 && col == y2) {
+                    row++;
+                } else if(row == x2 && col != y1) {
+                    col--;
+                } else if(row != x1 && col == y1) {
+                    row--;
+                }
+                
+                matrix[row][col] = matrix[row][col] ^ preNum;
+                preNum =  preNum ^ matrix[row][col];
+                matrix[row][col] = matrix[row][col] ^ preNum;
+
+                if(row == x1 && col == y1) break;
+            };
+
+            answer[i] = minNum;
         }
 
         return answer;
     }
 }
+
