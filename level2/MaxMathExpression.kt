@@ -58,7 +58,44 @@
 
 class Solution {
     fun solution(expression: String): Long {
-        var answer: Long = 0
-        return answer
+        var exp = expression.replace("+", " + ")
+            .replace("-", " - ")
+            .replace("*", " * ")
+            .split(" ")
+            .toMutableList()
+
+        var numbers = mutableListOf<Long>()
+
+        numbers.add(getNumber(exp.toMutableList(), "*", "+", "-"))
+        numbers.add(getNumber(exp.toMutableList(), "*", "-", "+"))
+        numbers.add(getNumber(exp.toMutableList(), "+", "*", "-"))
+        numbers.add(getNumber(exp.toMutableList(), "+", "-", "*"))
+        numbers.add(getNumber(exp.toMutableList(), "-", "*", "+"))
+        numbers.add(getNumber(exp.toMutableList(), "-", "+", "*"))
+
+        return numbers.stream().sorted(Comparator.reverseOrder()).findFirst().get()
+    }
+
+    fun getNumber(list:MutableList<String>, op1:String, op2:String, op3:String) : Long{
+        calculate(list, op1)
+        calculate(list, op2)
+        calculate(list, op3)
+        return Math.abs(list[0].toLong())
+    }
+
+    fun calculate(list:MutableList<String>, operator:String){
+        while(true){
+            var i = list.indexOf(operator)
+            if(i < 0) break
+
+            when (operator) {
+                "*" -> list[i-1] = (list[i-1].toLong() * list[i+1].toLong()).toString()
+                "+" -> list[i-1] = (list[i-1].toLong() + list[i+1].toLong()).toString()
+                "-" -> list[i-1] = (list[i-1].toLong() - list[i+1].toLong()).toString()
+            }
+            list.removeAt(i)
+            list.removeAt(i)
+        }
     }
 }
+
